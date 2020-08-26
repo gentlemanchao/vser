@@ -106,4 +106,5 @@ proto._for = function (obj, callback) {
     }
     return nodes;
 }
-export default vnode;
+
+module.exports = vnode;

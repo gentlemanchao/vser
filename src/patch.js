@@ -1,7 +1,7 @@
 /**
  * 渲染
  */
-import Events from './event';
+const Events = require('./event');
 
 /**
  * 
@@ -640,4 +640,4 @@ proto.update = function (vnode) {
     this.vnode = vnode;
 }
 
-export default patch;
+module.exports = patch;

@@ -1,14 +1,14 @@
-import Parse from './src/parse'; //编译模板
-import VNode from './src/vnode'; //虚拟dom
-import Patch from './src/patch'; //渲染和更新渲染
-import Cache from './src/cache'; //组件缓存
+const Parse = require('./src/parse'); //编译模板
+const VNode = require('./src/vnode'); //虚拟dom
+const Patch = require('./src/patch'); //渲染和更新渲染
+const Cache = require('./src/cache'); //组件缓存
 /***
  * 组件基类
  * 
  * 
  */
 
-export default class Vser {
+class Vser {
     constructor(options) {
         this.$$_el = options.el || null; //当前组件插入的插槽dom的对象
         this.template = options.template || null; //string|function //当前组件的html模板片段(运行时编译) | 模板渲染函数(构建时编译生成)
@@ -459,3 +459,5 @@ const isBelowIe9 = function () {
         return false;
     }
 }
+
+exports = module.exports = Vser;

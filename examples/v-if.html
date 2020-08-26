@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>
+        v-if
+    </title>
+    <meta charset="UTF-8">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1, user-scalable=no, shrink-to-fit=no">
+
+    <script src="../dist/index.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="tpl" type="text/template">
+        <div>
+            <!-- <h2>我是title</h2>
+            <div>
+                <p>----------我是分割线---------</p>
+                <p v-if="data.show">我是通过v-if判断要显示的</p>
+                <p v-else >我是通过v-if判断要隐藏的</p>
+                <p>----------我是分割线---------</p> -->
+
+                <p v-if="data.show">我是通过v-if-else="xxx"判断要隐藏的</p>
+                <p v-else-if="data.show2">我是通过v-if-else判断要隐藏的</p>
+                <p v-else  >我是通过v-if-else判断要隐藏的</p>
+               <!--  <p>----------我是分割线---------</p>
+            </div> -->
+        </div>
+    </script>
+    <script>
+        !function () {
+            class Main extends window.Vser {
+                constructor(options) {
+                    options.template = document.getElementById('tpl').innerText;
+                    Object.assign(options);
+                    super(options);
+                }
+                data() {
+                    return {
+                        show: true,
+                        show2: false
+                    }
+                }
+
+            }
+            const main = new Main({
+                el: document.getElementById('app')
+            })
+            console.log(main,main.$$_renderFunc.toString())
+        }()
+    </script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
  *  
  * */
 
-export default class Cache {
+module.exports = class Cache {
     constructor(ctx) {
         this.fragmentEl = document.createElement('div'); //组件临时碎片，用于暂存缓存的节点
         this.parentEl = null; //组件父节点

@@ -194,22 +194,25 @@ ast.prototype._nodeEnd = function (node, index) {
  */
 ast.prototype.addAttr = function (name, text, index) {
     name = name.replace(bindReg, '');
-    text = deleteStartAndEnd(text);
-    const str = name + '=' + text;
+    let str = name;
+    if (text !== null) {
+        text = deleteStartAndEnd(text);
+        str = name + '=' + text;
+    }
     if (sytaxAttrReg.test(name)) {
         //语法属性
-        let option = {
+        var option = {
             str: str,
             name: name,
             value: text,
             start: index,
             end: index + str.length
-        }
-        //事件函数
+            //事件函数
+        };
         if (eventReg.test(name) && funcReg.test(text)) {
-            const ret = text.match(funcReg);
+            var ret = text.match(funcReg);
             if (ret) {
-                option.value = ret[1]
+                option.value = ret[1];
                 // 函数参数
                 option.params = ret[2].trim().split(',');
             }
@@ -321,4 +324,4 @@ ast.prototype.render = function () {
     const string = _parseNode(this.tree);
     return `with(this){return ${string}}`;
 }
-export default ast;
+module.exports = ast;

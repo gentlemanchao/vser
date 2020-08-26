@@ -98,4 +98,4 @@ proto.removeEvent = function (el, type, listener, options) {
     }
 }
 
-export default _events;
+module.exports = _events;

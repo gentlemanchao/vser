@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>
+        slot
+    </title>
+    <meta charset="UTF-8">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1, user-scalable=no, shrink-to-fit=no">
+
+    <script src="../dist/index.js"></script>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="tpl" type="text/template">
+        <div style="background-color:#f36; padding:30px;">
+            <h2>我是父组件</h2>
+            <div>
+                <Second :text="data.toSecond">
+                    <p style="background-color:#f36; padding:30px;">
+                        我是父组件插入到子组件默认插槽内的一段文本
+                    </p>
+                    <div slot="slot2" style="background-color:#f36;">
+                        我是父组件插入到子组件插槽名为：slot2 内的一段文本
+                    </div>
+                </Second>
+            </div>
+        </div>
+    </script>
+    <script id="tpl2" type="text/template">
+        <div style="background-color:#ccc; padding:30px;">
+            <h2>我是子组件</h2>
+            <p>这是一句父组件通过props传递过来的一句话：{{props.text}}</p>
+            <div>
+                <p>我是默认插槽</p>
+                <slot></slot>
+            </div>
+            <div style="margin-top:30px; background-color:#23bb90; padding:30px;">
+                <p>我是插槽slot2</p>
+                <slot name="slot2"></slot>
+            </div>
+        </div>
+    </script>
+    <script>
+        !function () {
+
+            class Second extends window.Vser {
+                constructor(options) {
+                    options.template = document.getElementById('tpl2').innerText;
+                    Object.assign(options);
+                    super(options);
+                }
+                data() {
+                    return {
+                        text: '我就是要输出的内容',
+                        fontSize: '22px'
+                    }
+                }
+                props() {
+                    return {
+                        text: {
+                            type: String,
+                            default: '我是参数text'
+                        }
+                    }
+                }
+
+            }
+
+            class Main extends window.Vser {
+                constructor(options) {
+                    options.template = document.getElementById('tpl').innerText;
+                    Object.assign(options, {
+                        components: {
+                            Second: Second
+                        }
+                    });
+                    super(options);
+                }
+                data() {
+                    return {
+                        text: '我就是要输出的内容',
+                        fontSize: '22px',
+                        toSecond:'我是一句传给子组件的话'
+                    }
+                }
+
+            }
+            const main = new Main({
+                el: document.getElementById('app')
+            })
+        }()
+    </script>
+</body>
+
+</html>

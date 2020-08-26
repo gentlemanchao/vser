@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>
+        bind
+    </title>
+    <meta charset="UTF-8">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1, user-scalable=no, shrink-to-fit=no">
+
+    <script src="../dist/index.js"></script>
+    <style>
+        .border-top{
+            border-top: 3px solid #23bb90;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script id="tpl" type="text/template">
+        <div>
+            <h2>我是title</h2>
+            <div>
+                <p>----------我是分割线---------</p>
+                <p v-html="data.text" :style="{color:'#f00',fontSize:data.fontSize}" :class="{'border-top':true}"></p>
+                <p>----------我是分割线---------</p>
+            </div>
+        </div>
+    </script>
+    <script>
+        !function () {
+            class Main extends window.Vser {
+                constructor(options) {
+                    options.template = document.getElementById('tpl').innerText;
+                    Object.assign(options);
+                    super(options);
+                }
+                data() {
+                    return {
+                        text: '我就是要输出的内容',
+                        fontSize:'22px'
+                    }
+                }
+
+            }
+            const main = new Main({
+                el: document.getElementById('app')
+            })
+        }()
+    </script>
+</body>
+
+</html>
