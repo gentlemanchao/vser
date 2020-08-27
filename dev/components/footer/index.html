@@ -1,0 +1,9 @@
+<div class="c-footer">
+    <ul class="c-footer-wraper">
+        <li v-for="(item,index) in data.menuList" :key="index" @click="onClick(item)" class="footer-nav g-active">
+            <i class="icon" :class="item.icon"></i>
+            <span>{{item.name}}</span>
+        </li>
+      
+    </ul>
+</div>

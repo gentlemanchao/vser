@@ -1,0 +1,28 @@
+
+html,
+body,
+#app {
+    height: 100%;
+}
+
+.c-page {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .c-page-header {}
+
+    .c-page-body {
+        position: relative;
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+        // 以下代码为解决低版本android手机上子节点height 100%为窗口高度的问题
+        display: flex;
+        flex-direction: column;
+    }
+}

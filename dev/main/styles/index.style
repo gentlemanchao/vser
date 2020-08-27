@@ -1,0 +1,30 @@
+.main-404 {
+    width: 568px;
+    margin: 20px auto;
+    .content {
+        position: relative;
+        height: 218px;
+        background: url('../images/404.png') no-repeat center;
+        .text {
+            position: absolute;
+            top: 95px;
+            left: 270px;
+            ;
+            line-height: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+    }
+    .main-go-home {
+        margin-top: 50px;
+        text-align: center;
+        .btn,
+        .btn:visited {
+            display: inline-block;
+            padding:10px 30px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #77c036;
+        }
+    }
+}

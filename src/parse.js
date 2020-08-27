@@ -9,12 +9,14 @@ const qnameCapture = `((?:${ncname}\\:)?${ncname})`;
 const tagStartOpenReg = new RegExp(`^<(${qnameCapture})`);
 const tagEndReg = new RegExp(`^<\\/${qnameCapture}[^>]*>`);
 const tagStartCloseReg = /^\s*(\/?)>/;
-const doctypeReg = /^<!DOCTYPE [^>]+>/i
-const commentReg = /^<!\--[^-->]*-->/;
-const remarkReg = /<!--[\s\S]*?-->/g
-const attrReg = /^\s*(\S*)=(("([^"]*)")|('([^']*)'))/;
-const emptyReg = /^\s+/;
-const textReg = /^\S[^<]*/;
+const doctypeReg = /^<!DOCTYPE [^>]+>/i; //文档类型
+const commentReg = /^<!\--[^-->]*-->/; //注释
+const remarkReg = /<!--[\s\S]*?-->/g; //注释
+const attrsReg = /^([\s\S]*?)(?=\/?>)/; //所有的参数
+const attrReg = /^\s*(\S*)=(("([^"]*)")|('([^']*)'))/; //属性正则 如：xxx=""
+const attrReg2 = /^\s*(\S+)/; //属性正则 如： <xx disabled></xx>
+const emptyReg = /^\s+/; //空白正则
+const textReg = /^\S[^<]*/; //文本正则
 
 const parse = function (html) {
     this.ast = new Ast();
@@ -67,6 +69,29 @@ parse.prototype.run = function () {
             //标签开始
             const open = this.html.match(tagStartOpenReg);
             open && (this.ast.addTag(open[1], this.index + 1), this.forward(open[0].length));
+            //解析标签上的属性，直到遇到标签闭合 ">"
+            const ret = this.html.match(attrsReg);
+            if (ret && ret[0]) {
+                let attrString = ret[0];
+                let x = 100; //防止出现死循环
+                while (attrString && x--) {
+                    if (attrReg.test(attrString)) {
+                        //属性
+                        const attr = attrString.match(attrReg);
+                        let _len;
+                        attr && (_len = attr[0].length, this.ast.addAttr(attr[1], attr[2], this.index), this.forward(_len), attrString = attrString.substring(_len));
+                    } else if (attrReg2.test(attrString)) {
+                        //属性2
+                        const attr = attrString.match(attrReg2);
+                        let _len;
+                        attr && (_len = attr[0].length, this.ast.addAttr(attr[1], null, this.index), this.forward(_len), attrString = attrString.substring(_len));
+                    } else {
+                        const _len = attrString.length;
+                        attrString = attrString.substring(_len);
+                        this.forward(_len);
+                    }
+                }
+            }
 
         } else if (tagStartCloseReg.test(this.html)) {
             //标签结束
@@ -77,10 +102,6 @@ parse.prototype.run = function () {
             //标签闭合
             const end = this.html.match(tagEndReg);
             end && (this.ast.tagEnd(end[0], this.index), this.forward(end[0].length));
-        } else if (attrReg.test(this.html)) {
-            //属性
-            const attr = this.html.match(attrReg);
-            attr && (this.ast.addAttr(attr[1], attr[2], this.index), this.forward(attr[0].length));
         } else if (commentReg.test(this.html)) {
             //注释
             const comment = this.html.match(commentReg);

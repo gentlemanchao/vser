@@ -1,0 +1,31 @@
+<Page>
+    <Header slot="header">
+        <div style="color:#fff;" slot="left">我才是左侧按钮</div>
+    </Header>
+
+    <button @click="onClick" style="padding:30px; background-color:#f00;">
+        我在这里 {{data.test}}
+    </button>
+    <img src="https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg">
+    <Second @clicksecond="onMsg" :girl="data.girl"></Second>
+    <p
+        style="height:200px; background-color:#f00; background:url('https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg'); font-size:16px; color:#00f;">
+        我有背景图，你没有</p>
+    <div
+        style="height:200px; background-color:#f00; background:url(https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg) no-repeat center; font-size:16px;">
+        我有背景图，你没有</div>
+    <Third ref="third">
+        <Four></Four>
+    </Third>
+    <Footer slot="footer"></Footer>
+</Page>
+
+
+<!-- <div>
+    <p v-if="data.show">我是通过v-if="data.show"判断要显示的</p>
+    <p v-else>我是通过v-if判断要隐藏的</p>
+
+    <p v-if="!data.show">我是通过'v-if'="data.show"判断要隐藏的</p>
+    <p v-else-if="data.show2">我是通过v-else-if="data.show2"'判断要显示的</p>
+    <p v-else>我是通过v-"else"判断要显示的 {{ data.show2 ? 'dd\'d':'ew\'ww'}}</p>
+</div> -->

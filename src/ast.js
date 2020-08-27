@@ -56,7 +56,7 @@ const isPlainTextElement = makeMap('script,style,textarea', true)
 const isReservedTag = function (tag) {
     return isHTMLTag(tag) || isSVG(tag);
 };
-const sytaxAttrReg = /^(v-model|v-for|v-if|v-html|v-else-if|v-show|(v-bind)?:[^=]*|v-on:[^=]*|@[^=]*)$/; //语法
+const sytaxAttrReg = /^(v-model|v-for|v-if|v-html|v-else-if|v-else|v-show|(v-bind)?:[^=]*|v-on:[^=]*|@[^=]*)$/; //语法
 const attrTextReg = /^('([^']*)')|("([^"]*)")$/; //属性前后引号
 const textSytaxReg = /{{([\s\S]*?)}}/g; //文本语法
 const eventReg = /^@|^v-on/; //事件
@@ -254,6 +254,10 @@ ast.prototype.addDoctype = function (string) {
  * 根据语法树创建渲染函数
  */
 ast.prototype.render = function () {
+    /**
+     * 解析ast并生成渲染函数片段
+     * @param {*} node 当前节点
+     */
     const _parseNode = function (node) {
         let str = '';
         //普通html节点
@@ -262,8 +266,9 @@ ast.prototype.render = function () {
             let children = [];
             if (node.children && node.children.length) {
                 const nodeChildren = node.children || [];
-                for (let i = 0, len = nodeChildren.length; i < len; i++) {
-                    children.push(_parseNode(nodeChildren[i]));
+                while (nodeChildren.length) {
+                    children.push(_parseNode(nodeChildren[0]));
+                    nodeChildren.splice(0, 1);
                 }
             }
 
@@ -302,7 +307,40 @@ ast.prototype.render = function () {
             str = '_c("' + node.tag + '",' + mapToString(attrs) + ' ,' + mapToString(params) + ',' + '[' + children.join(',') + ']' + ',' + node.static + ')';
             //判断v-if语句
             if (node.attrMap['v-if']) {
-                str = '(' + node.attrMap['v-if'] + ') ? ' + str + ' : null';
+                const _parent = node.parent || null;
+                const _children = _parent && _parent.children || [];
+                let _arrIf = []; //连续的if 和else if
+                let _lastIf = null; //最后的else
+                _arrIf.push({
+                    condition: node.attrMap['v-if'],
+                    str: str
+                });
+                let ifCount = 0; //if条件计数
+                //循环处理 v-if后的 v-else-if 和 v-else节点
+                for (let _i = 1, _len = _children.length; _i < _len; _i++) {
+                    const _node = _children[_i];
+                    if (_node.attrMap['v-else-if']) {
+                        _arrIf.push({
+                            condition: _node.attrMap['v-else-if'],
+                            str: _parseNode(_node)
+                        });
+                        ifCount++;
+                    } else if (typeof _node.attrMap['v-else'] !== 'undefined') {
+                        _lastIf = _parseNode(_node);
+                        ifCount++;
+                    } else {
+                        break;
+                    }
+                }
+
+                let ifStr = _lastIf; //if条件块字符串
+                for (let _lenj = _arrIf.length, _j = _lenj - 1; _j >= 0; _j--) {
+                    const _ifNode = _arrIf[_j];
+                    ifStr = '(' + _ifNode.condition + ') ? ' + _ifNode.str + ': (' + ifStr + ')';
+
+                }
+                _children.splice(0, ifCount);
+                str = ifStr;
             }
             //判断v-for语句
             if (node.attrMap['v-for']) {
@@ -313,9 +351,17 @@ ast.prototype.render = function () {
             }
         } else if (node.type === 3) {
             //文本节点
-            const ret = node.text.replace(textSytaxReg, function (str, sytax) {
+            let text = node.text;
+            //转义单双引号,但是不转义模板语法内的单双引号
+            text = text.replace(/'/g, "--escaped-SingleQuotationByVser--")
+            text = text.replace(/"/g, "--escaped-DoubleQuotationByVser--")
+            let ret = text.replace(textSytaxReg, function (str, sytax) {
+                sytax = sytax.replace(/--escaped-SingleQuotationByVser--/g, "'");
+                sytax = sytax.replace(/--escaped-DoubleQuotationByVser--/g, '"');
                 return `" + (${sytax}) + "`;
             });
+            ret = ret.replace(/--escaped-SingleQuotationByVser--/g, "\\'");
+            ret = ret.replace(/--escaped-DoubleQuotationByVser--/g, '\\"');
             str = `_t("${ret.replace(/\n/g,'')}")`;
         }
         return str;

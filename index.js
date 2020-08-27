@@ -127,7 +127,11 @@ class Vser {
             const ast = new Parse(this.template);
             let funcStr = ast.render();
             funcStr = funcStr.replace(/[\r\n]/g, '');
-            this.$$_renderFunc = new Function(funcStr);
+            try {
+                this.$$_renderFunc = new Function(funcStr);
+            } catch (e) {
+                console.error(`模板编译失败,请检查是否有语法错误：${this.template}`);
+            }
         }
     }
     /**
@@ -245,8 +249,12 @@ class Vser {
         this.$$_beforeMounted = true;
         this.beforeMounted();
         if (this.$$_el && this.$$_renderFunc) {
-            this.$$_tree = this.$$_render();
-            this.$$_patch = new Patch(this.$$_el, this.$$_tree, this);
+            try {
+                this.$$_tree = this.$$_render();
+                this.$$_patch = new Patch(this.$$_el, this.$$_tree, this);
+            } catch (e) {
+                console.error(`组件渲染失败：${e.message}`);
+            }
         } else {
             console.error(`找不到组件${this.constructor.name||''}的插槽`);
         }

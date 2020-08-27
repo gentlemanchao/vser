@@ -1,0 +1,85 @@
+.c-footer {
+    border-top: 1px solid #cfcfcf;
+    background-color: #fff;
+
+    .c-footer-wraper {
+        display: flex;
+        flex-direction: row;
+        height: 50px;
+
+        .footer-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            user-select: none;
+
+            .icon {
+                display: block;
+                position: relative;
+                width: 20px;
+                height: 20px;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: auto 20px;
+            }
+
+            span {
+                margin-top: 4px;
+                text-align: center;
+                font-size: 12px;
+                line-height: 1;
+                color: #333;
+            }
+
+            .icon-0 {
+                background-image: url('../images/menu.0.png');
+            }
+
+            .icon-1 {
+                background-image: url('../images/menu.1.png');
+            }
+
+            .icon-2 {
+                background-image: url('../images/menu.2.png');
+            }
+
+            .icon-3 {
+                background-image: url('../images/menu.3.png');
+            }
+
+            .icon-4 {
+                background-image: url('../images/menu.4.png');
+            }
+        }
+
+        .current {
+            .icon-0 {
+                background-image: url('../images/menu.0.active.png');
+            }
+
+            .icon-1 {
+                background-image: url('../images/menu.1.active.png');
+            }
+
+            .icon-2 {
+                background-image: url('../images/menu.2.active.png');
+            }
+
+            .icon-3 {
+                background-image: url('../images/menu.3.active.png');
+            }
+
+            .icon-4 {
+                background-image: url('../images/menu.4.active.png');
+            }
+
+            span {
+                color: #2e68fa;
+            }
+        }
+    }
+}
