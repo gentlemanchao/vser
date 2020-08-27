@@ -1,18 +1,20 @@
-const Parse = require('./src/parse'); //编译模板
-const VNode = require('./src/vnode'); //虚拟dom
-const Patch = require('./src/patch'); //渲染和更新渲染
-const Cache = require('./src/cache'); //组件缓存
+import Parse from './src/parse'; //编译模板
+import VNode from './src/vnode'; //虚拟dom
+import Patch from './src/patch'; //渲染和更新渲染
+import Cache from './src/cache'; //组件缓存
 /***
  * 组件基类
  * 
  * 
  */
 
-class Vser {
+export default class Vser {
     constructor(options) {
         this.$$_el = options.el || null; //当前组件插入的插槽dom的对象
         this.template = options.template || null; //string|function //当前组件的html模板片段(运行时编译) | 模板渲染函数(构建时编译生成)
         this.parent = options.parent || null; //父组件实例
+        this.$$_style = options.style && options.style.toString && options.style.toString() || options.style; //样式会在组件销毁时移除
+        this.$$_styleEl = null;
         this.$$_customerComponents = Object.assign({}, Vser.components, options.components || {}); //自定义组件列表
         this.$$_vNode = new VNode();
         this.$$_cache = new Cache(this);
@@ -38,6 +40,7 @@ class Vser {
         this.children = []; //子组件数组
         this._init();
     }
+
 
     /**
      * 组件创建后挂载前
@@ -113,6 +116,7 @@ class Vser {
             child && child.destroyed && child.destroyed();
         }
 
+        this.$$_removeStyle()
         this.$$_patch.remove(this.$$_tree);
         this.children = [];
     }
@@ -127,12 +131,33 @@ class Vser {
             const ast = new Parse(this.template);
             let funcStr = ast.render();
             funcStr = funcStr.replace(/[\r\n]/g, '');
-            try {
-                this.$$_renderFunc = new Function(funcStr);
-            } catch (e) {
-                console.error(`模板编译失败,请检查是否有语法错误：${this.template}`);
-            }
+            this.$$_renderFunc = new Function(funcStr);
         }
+    }
+    /**
+     * 添加样式，组件销毁时会自动移除
+     */
+    $$_createStyle() {
+        if (!this.$$_style) return;
+        let el;
+        if (isBelowIe9()) {
+            //ie7 8 不支持给style标签设置 innerHTML 和 innerText
+            el = document.createElement('div');
+            el.innerHTML = `<style>${this.$$_style}</style>`;
+        } else {
+            el = document.createElement('style');
+            el.innerHTML = this.$$_style;
+        }
+        this.$$_styleEl = el;
+        const head = document.getElementsByTagName('head')[0];
+        head && head.appendChild(el);
+    }
+    /**
+     * 移除样式
+     */
+    $$_removeStyle() {
+        if (!this.$$_style || !this.$$_styleEl) return;
+        this.$$_styleEl.parentNode.removeChild(this.$$_styleEl);
     }
     /**
      * 初始化
@@ -140,6 +165,7 @@ class Vser {
     _init() {
         //模板编译
         this.$$_parseTemplate();
+        this.$$_createStyle();
         //触发组件已创建生命周期方法
         this.$$_setProps();
         this.$$_created = true;
@@ -249,12 +275,8 @@ class Vser {
         this.$$_beforeMounted = true;
         this.beforeMounted();
         if (this.$$_el && this.$$_renderFunc) {
-            try {
-                this.$$_tree = this.$$_render();
-                this.$$_patch = new Patch(this.$$_el, this.$$_tree, this);
-            } catch (e) {
-                console.error(`组件渲染失败：${e.message}`);
-            }
+            this.$$_tree = this.$$_render();
+            this.$$_patch = new Patch(this.$$_el, this.$$_tree, this);
         } else {
             console.error(`找不到组件${this.constructor.name||''}的插槽`);
         }
@@ -265,7 +287,7 @@ class Vser {
      * 渲染
      */
     $$_render() {
-        return this.$$_renderFunc.call(Object.assign(this, this.$$_vNode.__proto__));
+        return this.$$_renderFunc.call(Object.assign(this, VNode.prototype));
     }
 
     /**
@@ -468,4 +490,15 @@ const isBelowIe9 = function () {
     }
 }
 
-exports = module.exports = Vser;
+/**
+ * 创建唯一id
+ * @param string name 名称 添加到id前的名称
+ * @return xxx_jpw09e2p9ehqkqjf8p
+ */
+const createId = function (name) {
+    let id = new Date().getTime().toString(36);
+    id += Math.random()
+        .toString(36)
+        .substr(3);
+    return (name ? (name + '_') : '') + id;
+}

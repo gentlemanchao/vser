@@ -17,7 +17,8 @@ export default class Layout extends Vser {
         return {
             show: true,
             show2: false,
-            test: 'ccc'
+            test: 'ccc',
+            girl:'miss'
         }
     }
 

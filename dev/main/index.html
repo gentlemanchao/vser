@@ -6,13 +6,12 @@
     <button @click="onClick" style="padding:30px; background-color:#f00;">
         我在这里 {{data.test}}
     </button>
-    <img src="https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg">
-    <Second @clicksecond="onMsg" :girl="data.girl"></Second>
+    <Second @clicksecond="onMsg" v-bind:girl="data.girl"></Second>
     <p
-        style="height:200px; background-color:#f00; background:url('https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg'); font-size:16px; color:#00f;">
+        style="height:100px; background-color:#f00; background:url('https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg'); font-size:16px; color:#00f;">
         我有背景图，你没有</p>
     <div
-        style="height:200px; background-color:#f00; background:url(https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg) no-repeat center; font-size:16px;">
+        style="height:100px; background-color:#f00; background:url(https://lanjing-lt.oss-cn-beijing.aliyuncs.com/d6e29679054d409eb6bbbfefa4923c12.jpg) no-repeat center; font-size:16px;">
         我有背景图，你没有</div>
     <Third ref="third">
         <Four></Four>

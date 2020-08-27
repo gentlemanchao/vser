@@ -1,7 +1,7 @@
 /**
  * 渲染
  */
-const Events = require('./event');
+import Events from './event';
 
 /**
  * 
@@ -372,7 +372,7 @@ proto.remove = function (vnode, recursive) {
 
         }
 
-        !recursive && el.parentNode.removeChild(el); //对于递归删除而言，只需要删除根节点即可，子节点只需要移除事件。
+        !recursive && el.parentNode && el.parentNode.removeChild(el); //对于递归删除而言，只需要删除根节点即可，子节点只需要移除事件。
         vnode = null;
     }
 
@@ -640,4 +640,4 @@ proto.update = function (vnode) {
     this.vnode = vnode;
 }
 
-module.exports = patch;
+export default patch;

@@ -17,18 +17,17 @@
     <div id="app"></div>
     <script id="tpl" type="text/template">
         <div>
-            <!-- <h2>我是title</h2>
+            <h2>我是title</h2>
             <div>
+                <p>----------我是分割线v-if...else---------</p>
+                <p v-if="data.show">我是通过v-if="data.show"判断要显示的</p>
+                <p v-else >我是通过v-else判断要隐藏的</p>
+                <p>----------我是分割线 v-if...v-else-if...v-else---------</p>
+                <p v-if="data.show2">我是通过v-if="data.show2"判断要显示的</p>
+                <p v-else-if="data.show">我是通过v-if-else="data.show"判断要显示的</p>
+                <p v-else  >我是通过v-else判断要显示的</p>
                 <p>----------我是分割线---------</p>
-                <p v-if="data.show">我是通过v-if判断要显示的</p>
-                <p v-else >我是通过v-if判断要隐藏的</p>
-                <p>----------我是分割线---------</p> -->
-
-                <p v-if="data.show">我是通过v-if-else="xxx"判断要隐藏的</p>
-                <p v-else-if="data.show2">我是通过v-if-else判断要隐藏的</p>
-                <p v-else  >我是通过v-if-else判断要隐藏的</p>
-               <!--  <p>----------我是分割线---------</p>
-            </div> -->
+            </div>
         </div>
     </script>
     <script>
@@ -50,7 +49,7 @@
             const main = new Main({
                 el: document.getElementById('app')
             })
-            console.log(main,main.$$_renderFunc.toString())
+            console.log(main, main.$$_renderFunc.toString())
         }()
     </script>
 </body>
