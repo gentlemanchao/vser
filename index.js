@@ -379,11 +379,28 @@ export default class Vser {
         });
     }
 }
+
+/**
+ * 全局组件配置
+ */
 Vser.components = {};
+/**
+ * 注册全局组件方法
+ */
 Vser.component = function (name, componentObj) {
     if (!name) return;
     if (typeof componentObj !== 'function') return;
     Vser.components[name] = componentObj;
+}
+
+/**
+ * 使用插件
+ */
+Vser.use = function (plugin) {
+    if (!plugin) return;
+    if (typeof plugin.install == 'function') {
+        plugin.install(Vser);
+    }
 }
 
 
