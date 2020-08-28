@@ -1,6 +1,6 @@
 {
   "name": "vser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a mvvm framework ; compatible to ie7; serverside render by server template language ;",
   "main": "index.js",
   "scripts": {
