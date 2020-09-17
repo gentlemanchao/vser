@@ -404,7 +404,7 @@ Vser.use = function (plugin) {
 }
 
 
-const isFunction = function (obj) {
+function isFunction(obj) {
     return Object.prototype.toString.call(obj) === '[object Function]';
 }
 
@@ -413,7 +413,7 @@ const isFunction = function (obj) {
  * @param {*} data1 
  * @param {*} data2 
  */
-const diffData = function (data1, data2) {
+function diffData(data1, data2) {
     const type = typeOf(data1);
     if (type !== typeOf(data2)) {
         return false;
@@ -448,7 +448,7 @@ const diffData = function (data1, data2) {
  * 对象或数组的深拷贝
  * @param {Object|Array} 用于拷贝的对象或数组
  */
-const deepCopy = function (data) {
+function deepCopy(data) {
     const t = typeOf(data);
     let o;
 
@@ -476,7 +476,7 @@ const deepCopy = function (data) {
  * 获取数据类型
  * @param {} obj 用于判断的数据
  */
-const typeOf = function (obj) {
+function typeOf(obj) {
     const toString = Object.prototype.toString;
     const map = {
         '[object Boolean]': 'boolean',
@@ -494,7 +494,7 @@ const typeOf = function (obj) {
 };
 
 //?未用
-const isBelowIe9 = function () {
+function isBelowIe9() {
     if (navigator.appName == "Microsoft Internet Explorer") {
         let version = navigator.appVersion.split(";")[1].trim();
         if (version === "MSIE 8.0" || version === "MSIE 7.0" || version === "MSIE 6.0") {
@@ -512,7 +512,7 @@ const isBelowIe9 = function () {
  * @param string name 名称 添加到id前的名称
  * @return xxx_jpw09e2p9ehqkqjf8p
  */
-const createId = function (name) {
+function createId(name) {
     let id = new Date().getTime().toString(36);
     id += Math.random()
         .toString(36)

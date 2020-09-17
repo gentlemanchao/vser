@@ -21,20 +21,20 @@ const patch = function (el, vnode, nameSpace) {
  * 是否是对象
  * @param {*} obj 
  */
-const isObject = function (obj) {
+function isObject(obj) {
     return Object.prototype.toString.call(obj) === '[object Object]';
 }
 /**
  * 短横线转驼峰式
  * @param {*} str 
  */
-const toCamel = function (str) {
+function toCamel(str) {
     return str.replace(/([^-])(?:-+([^-]))/g, function ($0, $1, $2) {
         return $1 + $2.toUpperCase();
     });
 }
 
-const hasClass = function (el, name) {
+function hasClass(el, name) {
     if (!el.className) return false;
     if (el.classList) {
         return el.classList.contains(name);
@@ -48,7 +48,8 @@ const hasClass = function (el, name) {
         return false;
     }
 }
-const addClass = function (el, name) {
+
+function addClass(el, name) {
     if (hasClass(el, name)) return;
     if (el.classList) {
         el.classList.add(name);
@@ -57,7 +58,8 @@ const addClass = function (el, name) {
     }
 
 }
-const removeClass = function (el, name) {
+
+function removeClass(el, name) {
     if (!el.className) return;
     if (!hasClass(el, name)) return;
     if (el.classList) {

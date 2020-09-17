@@ -63,7 +63,7 @@ const eventReg = /^@|^v-on/; //事件
 const funcReg = /^([^(]*)\(([^)]*)\)/; //函数
 const bindReg = /^v-bind/;
 // 删除前后引号
-const deleteStartAndEnd = function (text) {
+function deleteStartAndEnd(text) {
     const ret = text.match(attrTextReg);
     if (ret) {
         return ret && (ret[2] || ret[4]);
@@ -72,11 +72,11 @@ const deleteStartAndEnd = function (text) {
     }
 }
 //删除前面的冒号
-const deleteColon = function (str) {
+function deleteColon(str) {
     return str.replace(/^:/, '');
 }
 //map转字符串
-const mapToString = function (map) {
+function mapToString(map) {
     let arr = [];
     for (let key in map) {
         if (Object.prototype.toString.call(map[key]) == '[object Object]') {
@@ -258,7 +258,7 @@ ast.prototype.render = function () {
      * 解析ast并生成渲染函数片段
      * @param {*} node 当前节点
      */
-    const _parseNode = function (node) {
+    function _parseNode(node) {
         let str = '';
         //普通html节点
         if (node.type === 1) {
