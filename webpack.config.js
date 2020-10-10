@@ -40,14 +40,14 @@ module.exports = {
     },
     optimization: {
         minimizer: [
-            // new UglifyJsPlugin({
-            //     cache: true,
-            //     parallel: true,
-            //     sourceMap: false, // set to true if you want JS source maps
-            //     uglifyOptions: {
-            //         ie8: true
-            //     }
-            // })
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                sourceMap: false, // set to true if you want JS source maps
+                uglifyOptions: {
+                    ie8: true
+                }
+            })
         ]
     },
     plugins: [
